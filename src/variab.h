@@ -38,14 +38,14 @@
 /* if you adjust any of the variable values below, you need to recompile the code !========*/
 /* ========================================================================================*/
 
-float  surftempminimum = -30.;  /*surftemp cannot be lower than this*/
+float  surftempminimum = -40.;  /*surftemp cannot be lower than this*/
 int    dat_or_txt = 2;   /*1=dat, 2=txt, extension for areamean, grid asciifiles*/
 int    setmelt2zero = 0;  /*melt is set to 0 if surftemp < surtempminmelt; yes=1, no=0;  April 2010*/
 /*only if methodsurtempglac=3 */
 int    surftempminmelt = -0.5;  /*if setmelt2zero=1 melt is set to 0 if surftemp below this value*/
 float  z2=2;     /*height of the temp/wind/humidity measurements for bulk aerodynamic method*/
 float  emissivitysurf=1;   /*surface emissivity for calc of longwave out from surf temp and for computing longwave outgoing (radiat.c)*/
-int    snetfromobsyes = 1;     /*0=Shorwavenet from albedo, 1 = Snet from obs Sin Srefl only possible if calcgridyes=2 and obs available; set to 0 in input.c, if calcgridyes == 1*/
+int    snetfromobsyes = 0;     /*0=Shorwavenet from albedo, 1 = Snet from obs Sin Srefl only possible if calcgridyes=2 and obs available; set to 0 in input.c, if calcgridyes == 1*/
 /*to force energy balance with shortwave measurements in case only climate station computed*/
 /*in order to exclude shortwave(albeodo) simulations from explaining deviations obs-simul*/
 int    allradiationfromfile=0;  /*0=No, 1=Yes, take glob, refl, longin, longout from file, only if just climate station cell computed*/
@@ -102,7 +102,7 @@ float firndepthbottom = 20;     /*depth at which firndensitybottom is reached, i
 /*deepest depth at which firnlayerdensity is needed*/
 /*----- END OF VARIABLE THAT NEED TO BE ADJUSTED FOR INITIALIZATION OF SUBSURFACE PROFILES ---------------*/
 
-int  supericegrid=0;     /* 0 = all grids at normal vertical resolution, 1 = chosen grids at larger vertical resolution 2 = all grids at larger resolution*/
+int  supericegrid=2;     /* 0 = all grids at normal vertical resolution, 1 = chosen grids at larger vertical resolution 2 = all grids at larger resolution*/
 int  typealbedo=1;   /*snow albedo equation: 0=Oerlemans, 1=Oerlemans/Zuo, 2=douville */
 int  typeconduc=2;      /*5 functions to compute ice conductivity*/
 int  typedens=3;		/*3 functions to compute densification of the dry snowpack*/
@@ -124,12 +124,13 @@ double  factc4 = 10.;  		/*factor with which surface water runsoff faster compar
 /*for function albedosnowpoly for zongo glacier, function by J.E. Sicart, see PhD thesis p.243 */
 double Czgo = 0.02 ;   /* h per mm we, parametre albk3 de hock */
 double nzgo = 10 ;       /* in days */
-double ezgo = 6 ;        /* in mm we */
+double ezgo = 5 ;        /* in mm we */
+float  albpre = 0.9 ;       /*ALBEDO VALUE AFTER PRECIPITATION; INITIALIZED TO 0.9 (ADDED JAI CHOWDHRY BEEMAN 2016)*/
 
 /*for parameterization of longwave radiation according to Konzelmann, function longinstationkonzel*/
-float bKonzel   = 0.442;   /* value in Konzelmann et al.  b=0.484 */
-float eocKonzel = 0.968;   /* emissivity overcast in Konzelmann et al. eoc=0.952 */
-float pKonzel   = 2;       /* value in Konzelmann et al.  p=4 */
+float bKonzel   = 0.484;   /* value in Konzelmann et al.  b=0.484 */
+float eocKonzel = 0.952;   /* emissivity overcast in Konzelmann et al. eoc=0.952 */
+float pKonzel   = 4;       /* value in Konzelmann et al.  p=4 */
 
 /******************************************/
 int    readsnowalbedo=0;   /*1=snow albedo read from another climate station file, daily means*/

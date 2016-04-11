@@ -1,17 +1,17 @@
 /***********************************************************************
  * Copyright 1998-2012 Regine Hock
  * This file is part of DeBAM and DETiM.
- * 
+ *
  * This is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with This software.  If not, see <http://www.gnu.org/licenses/>.
  **********************************************************************/
@@ -872,6 +872,27 @@ void albedosnowpoly() {
     afirn=albfirn;   /* from input.dat */
     aice=albice;     /* from input.dat */
 
+    /***************************agu***********/
+
+
+  if(surface[i][j]==3)			 /***surface is ice	   */
+   {    /*ice linear decrease with elevation*/
+       ALBEDO[i][j] = albice-albice*
+              ((griddgm[rowclim][colclim]-griddgm[i][j])*albiceproz/100/100);
+
+       ALBALT[i][j] = ALBEDO[i][j];    /*store albedo for next time step*/
+      /*must be a different array, because, ALBEDO-array may be overwritten,
+        if means are written to output, see writeout.c*/
+    }
+
+   if((surface[i][j]==1) || (surface[i][j]==2))			 /***surface is snow or firn   */
+    {
+   	   ALBALT[i][j] = ALBEDO[i][j];    /*store albedo for next time step*/
+      /*must be a different array, because, ALBEDO-array may be overwritten,
+        if means are written to output, see writeout.c*/
+
+      /***************************agu***********/
+
     if(snowprec == 0) {        /*no snow fall, decrease in albedo*/
         numbdays[i][j] += timestep/24.0;    /*number of days in days*/
 
@@ -882,7 +903,7 @@ void albedosnowpoly() {
 
         snow = SNOW[i][j];     /* SNOW is in cm !!!  ABLA and snowprec in mm !!! */
 
-        alb1 = afirn + (anewsnow-afirn) * exp(-1*numbdays[i][j]/nzgo);
+        alb1 = afirn + (albpre-afirn) * exp(-1*numbdays[i][j]/nzgo);
 
         if ((FIRN[i][j]!=0)&(FIRN[i][j]!=-1))
             alb2 = alb1;   /* firn area */
@@ -911,8 +932,11 @@ void albedosnowpoly() {
         if(ALBEDO[i][j] > albmax)        /*upper limit of albedo*/
             ALBEDO[i][j] = albmax;
         numbdays[i][j] = 0;
+        albpre = ALBEDO[i][j];
+        if(albpre < afirn)        /*lower limt limit of albedo to prevent 'positive decay'*/
+            albpre = afirn;
     }
-
+} /* END WHICH SURFACE (NEW)*/
     return;
 }
 
@@ -1212,7 +1236,7 @@ void radiationbalance()
             NETRAD[i][j] = SWBAL[i][j] + LONGIN[i][j] - LWout;
         else                /*LONG OUT VARIABLE IN SPACE OR TAKEN FROM MEASUREMENTS*/
             NETRAD[i][j] = SWBAL[i][j] + LONGIN[i][j] - LONGOUT[i][j];
-    
+
     /*take all radiation data from file, only if only station grid cell computed*/
     if((allradiationfromfile == 1) && (methodsurftempglac == 3) && (calcgridyes == 2))
         NETRAD[i][j] = glob - ref + LWin - LWout;
