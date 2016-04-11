@@ -112,6 +112,7 @@ extern double  factc4;  		/*factor with which surface water runsoff faster compa
 extern double Czgo ;   /* h per mm we, parametre albk3 de hock */
 extern double nzgo ;       /* in days */
 extern double ezgo ;        /* in mm we */
+extern float  albpre ;       /*ALBEDO VALUE AFTER PRECIPITATION; INITIALIZED TO 0.9 (ADDED JAI CHOWDHRY BEEMAN 2016)*/
 
 /*for parameterization of longwave radiation according to Konzelmann, function longinstationkonzel*/
 extern float bKonzel;     /* value in Konzelmann et al.  b=0.484 */
