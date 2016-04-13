@@ -903,7 +903,10 @@ void albedosnowpoly() {
 
         snow = SNOW[i][j];     /* SNOW is in cm !!!  ABLA and snowprec in mm !!! */
 
-        alb1 = afirn + (albpre-afirn) * exp(-1*numbdays[i][j]/nzgo);
+        if(albpre > afirn)        /*lower limit of albedo to prevent 'positive decay'*/
+            alb1 = afirn + (albpre-afirn) * exp(-1*numbdays[i][j]/nzgo);
+        else
+            alb1 = albpre;
 
         if ((FIRN[i][j]!=0)&(FIRN[i][j]!=-1))
             alb2 = alb1;   /* firn area */
